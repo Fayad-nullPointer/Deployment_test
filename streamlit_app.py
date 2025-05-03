@@ -2,19 +2,21 @@
 import streamlit as st
 from transformers import pipeline
 
-# Load translation pipeline (English to French)
+# Load image-to-text pipeline
 @st.cache_resource
-def load_translator():
-    return pipeline("translation_en_to_fr")
+def load_image_to_text_model():
+    return pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
 
-translator = load_translator()
+image_to_text_model = load_image_to_text_model()
 
 # Streamlit UI
-st.title("English to French Translator")
+st.title("Image to Text Converter")
+st.markdown("By Ahmed Fayad")
 
-english_text = st.text_input("Enter English text:", "The cat is on the table.")
+uploaded_image = st.file_uploader("Upload an image:", type=["jpg", "jpeg", "png"])
 
-if st.button("Translate"):
-    translation = translator(english_text)
-    french_text = translation[0]['translation_text']
-    st.success(f"French: {french_text}")
+if uploaded_image is not None:
+    st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
+    if st.button("Generate Caption"):
+        caption = image_to_text_model(uploaded_image)
+        st.success(f"Caption: {caption[0]['generated_text']}")
