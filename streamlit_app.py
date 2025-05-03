@@ -5,7 +5,7 @@ from transformers import pipeline
 # Load image-to-text pipeline
 @st.cache_resource
 def load_image_to_text_model():
-    return pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
+    return pipeline("image-to-text")
 
 image_to_text_model = load_image_to_text_model()
 
